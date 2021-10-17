@@ -1,0 +1,4 @@
+sqlmodel==0.0.4; python_full_version >= "3.6.1" and python_full_version < "4.0.0"
+fastapi==0.70.0; python_full_version >= "3.6.1"
+uvicorn==0.15.0
+

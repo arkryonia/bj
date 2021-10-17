@@ -1,14 +1,18 @@
 [tool.poetry]
 name = "app"
 version = "0.1.0"
-description = ""
+description = "bj services"
 authors = ["Hodonou SOUNTON <arkryonia@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+fastapi = "^0.70.0"
+sqlmodel = "^0.0.4"
+uvicorn = {extras = ["standards"], version = "^0.15.0"}
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+autopep8 = "^1.5.7"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
