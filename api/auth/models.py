@@ -7,14 +7,19 @@ from typing import Optional
 
 class UserBase(SQLModel):
     email: EmailStr
+
+
+class UserLogin(UserBase):
+    password: str
+
+
+class UserCreate(UserLogin):
     is_active: Optional[bool] = True
 
 
-class UserCreate(UserBase):
-    password: str
-
 class UserRead(UserCreate):
     id: int
+
 
 class User(UserCreate, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

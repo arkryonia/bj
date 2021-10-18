@@ -12,3 +12,8 @@ def user_exits(email: str):
         detail=f"User with email {email} already exit"
     )
 
+def email_error():
+    return HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=f"Invalid email"
+    )

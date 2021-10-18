@@ -31,3 +31,18 @@ def signup(user_in: models.UserCreate, db: Session = Depends(get_db)):
     except:
         error_msg = "Failed to signup user"
         return error_msg
+
+
+@auth.post('/login')
+def login(user_in: models.UserLogin, db: Session = Depends(get_db)):
+    print(user_in.password)
+    stmt = select(models.User).where(models.User.email==user_in.email)
+    user = db.exec(stmt).one()
+    if not user:
+        return errors.email_error()
+    if (not helper.verify_password(user_in.password, user.password)):
+        return HTTPException(status_code=401, detail="Invalid password")
+    
+    access_token = helper.encode_token(user.email)
+    refresh_token = helper.encode_refresh_token(user.email)
+    return {'access_token': access_token, 'refresh_token': refresh_token}
