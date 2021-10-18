@@ -10,6 +10,7 @@ from core.db import create_db_and_tables
 from api.lands.departments import departments
 from api.lands.towns import towns
 from api.lands.districts import districts
+from api.auth.auth import auth
 
 app = FastAPI()
 
@@ -32,9 +33,11 @@ def on_startup():
     create_db_and_tables()
 
 
+app.include_router(auth, prefix="/u", tags=["Users Accounts"])
 app.include_router(departments, prefix="/bj/d", tags=["Departments"])
 app.include_router(towns, prefix="/bj/t", tags=["Towns"])
 app.include_router(districts, prefix="/bj/l", tags=["Districts"])
+
 
 @app.get('/', tags=["Index"])
 def index():
