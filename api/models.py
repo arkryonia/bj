@@ -1,4 +1,4 @@
-from __future__ import annotations
+# from __future__ import annotations
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import Column, String, Boolean
@@ -15,18 +15,20 @@ class DepartmentCreate(SQLModel):
     code: str
 
 
-class DepartmentRead(DepartmentCreate):
-    created_at: Optional[datetime]
-    updated_at: Optional[datetime]
-
-
 class TownCreate(SQLModel):
     name: str
     code: str
     is_capital: Optional[bool] = False
 
 
+class DepartmentRead(DepartmentCreate):
+    towns: Optional[List[TownCreate]] = []
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+
+
 class TownRead(TownCreate):
+    department: Optional[DepartmentRead] = None
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
@@ -63,9 +65,11 @@ class Town(TownCreate, table=True):
     created_at: Optional[datetime] = datetime.utcnow()
     updated_at: Optional[datetime] = datetime.utcnow()
 
-    department_id: Optional[int] = Field(default=None, foreign_key="department.id")
+    department_id: Optional[int] = Field(
+        default=None, foreign_key="department.id")
     department: Optional[Department] = Relationship(back_populates="towns")
-    districts: List["District"] = Relationship(back_populates="district")
+
+    districts: List["District"] = Relationship(back_populates="town")
 
 
 class District(DistrictCreate, table=True):
