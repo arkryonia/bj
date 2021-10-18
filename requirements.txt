@@ -1,4 +1,7 @@
-sqlmodel==0.0.4; python_full_version >= "3.6.1" and python_full_version < "4.0.0"
-fastapi==0.70.0; python_full_version >= "3.6.1"
-uvicorn==0.15.0
+fastapi==0.70.0
+sqlmodel==0.0.4
+uvicorn[standards]==0.15.0
+pyjwt==2.3.0
+passlib[bcript]==1.7.4
+pydantic[dotenv,email]==1.8.2
 

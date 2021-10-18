@@ -1,7 +1,6 @@
-from os import getenv
 from sqlmodel import SQLModel, create_engine, Session
 
-sqlite_file_name = getenv("PROD_DB", "bj.db")
+sqlite_file_name = "bj.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"
 
 connect_args = {"check_same_thread": False}
