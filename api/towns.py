@@ -14,14 +14,14 @@ def list_towns(db: Session = Depends(get_db)):
     return towns
 
 
-@towns.post('/{code}', response_model=models.TownRead)
-def create_town(*, db: Session = Depends(get_db), code: str, town: models.TownCreate):
+@towns.post('/{id}', response_model=models.TownRead)
+def create_town(*, db: Session = Depends(get_db), id: int, town: models.TownCreate):
     dep_not_found = HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Department with code {code} is not available :("
+        detail=f"Department with id {id} is not available :("
     )
 
-    statement = select(models.Department).where(models.Department.code == code)
+    statement = select(models.Department).where(models.Department.id == id)
     department = db.exec(statement).first()
     if not department:
         raise dep_not_found
@@ -36,14 +36,14 @@ def create_town(*, db: Session = Depends(get_db), code: str, town: models.TownCr
 
 
 
-@towns.get('/{code}', response_model=models.TownRead)
-def read_town(code: str, db: Session = Depends(get_db)):
+@towns.get('/{id}', response_model=models.TownRead)
+def read_town(id: int, db: Session = Depends(get_db)):
     town_not_found = HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Town with code {code} is not available :("
+        detail=f"Town with id {id} is not available :("
     )
 
-    stmt = select(models.Town).where(models.Town.code == code)
+    stmt = select(models.Town).where(models.Town.id == id)
     town = db.exec(stmt).first()
     if not town:
         raise town_not_found
@@ -51,11 +51,11 @@ def read_town(code: str, db: Session = Depends(get_db)):
 
 
 
-@towns.patch('/{code}')
-def update_town(code: str, town: models.Town):
+@towns.patch('/{id}')
+def update_town(id: int, town: models.Town):
     return {"message": "this feature is coming..."}
 
 
-@towns.delete('/{code}')
-def delete_town(code: str):
+@towns.delete('/{id}')
+def delete_town(id: int):
     return {"message": "this feature is coming..."}
