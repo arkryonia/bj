@@ -37,7 +37,7 @@ def signup(user_in: models.UserCreate, db: Session = Depends(get_db)):
 def login(user_in: models.UserLogin, db: Session = Depends(get_db)):
     print(user_in.password)
     stmt = select(models.User).where(models.User.email==user_in.email)
-    user = db.exec(stmt).one()
+    user = db.exec(stmt).first()
     if not user:
         return errors.email_error()
     if (not helper.verify_password(user_in.password, user.password)):
