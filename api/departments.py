@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends, status
 from sqlmodel import Session, select
 
 from api import models
+from utils import errors
 from core.db import get_db
 
 departments = APIRouter()
@@ -24,23 +25,37 @@ def create_department(*, db: Session = Depends(get_db), department: models.Depar
     return  department
 
 @departments.get("/{id}", response_model=models.DepartmentRead)
-def read_department(id: int, db: Session = Depends(get_db)):
-    dep_not_found = HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"Department with id {id} is not available :("
-    )
+def read_department(id: int, db: Session = Depends(get_db)):    
     stmt = select(models.Department).where(models.Department.id == id)
     department = db.exec(stmt).first()
     if not department:
-        raise dep_not_found
+        raise errors.not_found("Department", id)
     return department
 
 
 @departments.patch('/{id}')
-def update_department(id: int, department: models.Department):
-    return {"message": "this feature is coming..."}
+def update_department(
+        id: int, 
+        department: models.DepartmentUpdate,
+        db: Session = Depends(get_db)
+    ):
+    db_department = db.get(models.Department, id)
+    if not db_department:
+        raise errors.not_found("Department", id)
+    department_data = department.dict(exclude_unset=True)
+    for key, value in department_data.items():
+        setattr(db_department, key, value)
+    db.add(db_department)
+    db.commit()
+    db.refresh(db_department)
+    return db_department
 
 
 @departments.delete('/{id}')
-def delete_department(id: int):
-    return {"message": "this feature is coming..."}
+def delete_department(id: int, db: Session = Depends(get_db)):
+    department = db.get(models.Department, id)
+    if not department:
+        raise errors.not_found("Department", id)
+    db.delete(department)
+    db.commit()
+    return {"ok": True}
