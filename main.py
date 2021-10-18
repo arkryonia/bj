@@ -9,6 +9,7 @@ from core.db import create_db_and_tables
 # import routes
 from api.departments import departments
 from api.towns import towns
+from api.districts import districts
 
 app = FastAPI()
 
@@ -31,8 +32,9 @@ def on_startup():
     create_db_and_tables()
 
 
-app.include_router(departments, prefix="/bj/departments", tags=["Departments"])
-app.include_router(towns, prefix="/bj/towns", tags=["Towns"])
+app.include_router(departments, prefix="/bj/d", tags=["Departments"])
+app.include_router(towns, prefix="/bj/t", tags=["Towns"])
+app.include_router(districts, prefix="/bj/l", tags=["Districts"])
 
 @app.get('/', tags=["Index"])
 def index():

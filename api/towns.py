@@ -8,13 +8,13 @@ from core.db import get_db
 
 towns = APIRouter()
 
-@towns.get('/towns/', response_model=List[models.TownRead])
+@towns.get('/', response_model=List[models.TownRead])
 def list_towns(db: Session = Depends(get_db)):
     towns = db.exec(select(models.Town)).all()
     return towns
 
 
-@towns.post('/towns/{code}', response_model=models.TownRead)
+@towns.post('/{code}', response_model=models.TownRead)
 def create_town(*, db: Session = Depends(get_db), code: str, town: models.TownCreate):
     dep_not_found = HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -36,7 +36,7 @@ def create_town(*, db: Session = Depends(get_db), code: str, town: models.TownCr
 
 
 
-@towns.get('/towns/{code}', response_model=models.TownRead)
+@towns.get('/{code}', response_model=models.TownRead)
 def read_town(code: str, db: Session = Depends(get_db)):
     town_not_found = HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -48,3 +48,14 @@ def read_town(code: str, db: Session = Depends(get_db)):
     if not town:
         raise town_not_found
     return town
+
+
+
+@towns.patch('/{code}')
+def update_town(code: str, town: models.Town):
+    return {"message": "this feature is coming..."}
+
+
+@towns.delete('/{code}')
+def delete_town(code: str):
+    return {"message": "this feature is coming..."}

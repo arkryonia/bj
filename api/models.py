@@ -26,9 +26,13 @@ class DepartmentRead(DepartmentCreate):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
+class TownDepartmentRead(DepartmentCreate):
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
+
 
 class TownRead(TownCreate):
-    department: Optional[DepartmentRead] = None
+    department: Optional[TownDepartmentRead] = None
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
