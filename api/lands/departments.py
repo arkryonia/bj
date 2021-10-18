@@ -1,9 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, Depends, status
 from sqlmodel import Session, select
 
-from api import models
+from api.lands import models
 from utils import errors
 from core.db import get_db
 

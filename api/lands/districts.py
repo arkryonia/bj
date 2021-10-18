@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
 
-from api import models
+from api.lands import models
 from utils import errors
 from core.db import get_db
 

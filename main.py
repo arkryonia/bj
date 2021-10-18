@@ -7,9 +7,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.db import create_db_and_tables
 
 # import routes
-from api.departments import departments
-from api.towns import towns
-from api.districts import districts
+from api.lands.departments import departments
+from api.lands.towns import towns
+from api.lands.districts import districts
 
 app = FastAPI()
 
