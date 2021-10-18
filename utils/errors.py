@@ -17,3 +17,14 @@ def email_error():
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail=f"Invalid email"
     )
+
+def disabled_user():
+    return HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=f"Disabled user"
+    )
+
+{
+  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzQ1ODg4NzQsImlhdCI6MTYzNDU4NzA3NCwic2NvcGUiOiJhY2Nlc3NfdG9rZW4iLCJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIn0.ngXQvZSleaWHBOAMQKVKRwuYwcAndKZFv4ryE6Eoy14",
+  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MzQ2MjMwNzQsImlhdCI6MTYzNDU4NzA3NCwic2NvcGUiOiJyZWZyZXNoX3Rva2VuIiwic3ViIjoidXNlckBleGFtcGxlLmNvbSJ9.eLjwVizEFcm-zF_5NwMdrc1c4ty8JhgnNvTLjUGS6XY"
+}

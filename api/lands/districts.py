@@ -1,7 +1,9 @@
 from typing import List
 
 from fastapi import APIRouter, Depends
+from fastapi.security.http import HTTPAuthorizationCredentials
 from sqlmodel import Session, select
+from api.auth.auth import secure
 
 from api.lands import models
 from utils import errors
@@ -17,7 +19,12 @@ def list_districts(db: Session = Depends(get_db)):
 
 
 @districts.post('/{town_id}', response_model=models.DistrictRead)
-def create_district(town_id: int, district: models.DistrictCreate, db: Session = Depends(get_db)):
+def create_district(
+        town_id: int, 
+        district: models.DistrictCreate, 
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     
     town = db.get(models.Town, town_id)
     if not town:
@@ -32,7 +39,12 @@ def create_district(town_id: int, district: models.DistrictCreate, db: Session =
 
 
 @districts.patch('/{id}', response_model=models.DistrictRead)
-def update_district(id: int, district: models.DistrictUpdate, db: Session = Depends(get_db)):
+def update_district(
+        id: int, 
+        district: models.DistrictUpdate, 
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     db_district = db.get(models.District, id)
     if not db_district:
         raise errors.not_found("District", id)
@@ -46,7 +58,11 @@ def update_district(id: int, district: models.DistrictUpdate, db: Session = Depe
 
 
 @districts.delete('/{id}',)
-def delete_district(id: int, db: Session = Depends(get_db)):
+def delete_district(
+        id: int, 
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     db_district = db.get(models.District, id)
     if not db_district:
         raise errors.not_found("District", id)

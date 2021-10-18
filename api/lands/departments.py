@@ -1,9 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends
 from sqlmodel import Session, select
+from fastapi.security import HTTPAuthorizationCredentials
 
 from api.lands import models
+from api.auth.auth import secure
 from utils import errors
 from core.db import get_db
 
@@ -17,7 +19,12 @@ def list_departments(db: Session = Depends(get_db)):
 
 
 @departments.post('/', response_model=models.DepartmentRead)
-def create_department(*, db: Session = Depends(get_db), department: models.DepartmentCreate):
+def create_department(
+        *, 
+        db: Session = Depends(get_db), 
+        department: models.DepartmentCreate,
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     department = models.Department.from_orm(department)
     db.add(department)
     db.commit()
@@ -37,7 +44,8 @@ def read_department(id: int, db: Session = Depends(get_db)):
 def update_department(
         id: int, 
         department: models.DepartmentUpdate,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
     ):
     db_department = db.get(models.Department, id)
     if not db_department:
@@ -52,7 +60,11 @@ def update_department(
 
 
 @departments.delete('/{id}')
-def delete_department(id: int, db: Session = Depends(get_db)):
+def delete_department(
+        id: int, 
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     department = db.get(models.Department, id)
     if not department:
         raise errors.not_found("Department", id)

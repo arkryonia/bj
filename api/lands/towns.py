@@ -1,7 +1,9 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, Depends
+from fastapi.security import HTTPAuthorizationCredentials
 from sqlmodel import Session, select
+from api.auth.auth import secure
 
 from api.lands import models
 from utils import errors
@@ -16,7 +18,13 @@ def list_towns(db: Session = Depends(get_db)):
 
 
 @towns.post('/{department_id}', response_model=models.TownRead)
-def create_town(*, db: Session = Depends(get_db), department_id: int, town: models.TownCreate):
+def create_town(
+        *, 
+        db: Session = Depends(get_db), 
+        department_id: int, 
+        town: models.TownCreate,
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     department = db.get(models.Department, department_id)
     if not department:
         raise errors.not_found("Department", department_id)
@@ -42,7 +50,12 @@ def read_town(id: int, db: Session = Depends(get_db)):
 
 
 @towns.patch('/{id}', response_model=models.TownRead)
-def update_town(id: int, town: models.TownUpdate, db: Session = Depends(get_db)):
+def update_town(
+        id: int, 
+        town: models.TownUpdate, 
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     db_town = db.get(models.Town, id)
     if not db_town:
         raise errors.not_found("Town", id)
@@ -56,7 +69,11 @@ def update_town(id: int, town: models.TownUpdate, db: Session = Depends(get_db))
 
 
 @towns.delete('/{id}')
-def delete_town(id: int, db: Session = Depends(get_db)):
+def delete_town(
+        id: int, 
+        db: Session = Depends(get_db),
+        credentials: HTTPAuthorizationCredentials = secure()
+    ):
     town = db.get(models.Town, id)
     if not town:
         raise errors.not_found("Town", id)
