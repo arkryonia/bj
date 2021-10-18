@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from core.db import create_db_and_tables
 
 # import routes
-from api.router import bj
+from api.departments import departments
 
 app = FastAPI()
 
@@ -30,7 +30,7 @@ def on_startup():
     create_db_and_tables()
 
 
-app.include_router(bj, prefix="/bj", tags=["Benin Lands"])
+app.include_router(departments, prefix="/bj", tags=["Benin Lands"])
 
 
 @app.get('/', tags=["Index"])
